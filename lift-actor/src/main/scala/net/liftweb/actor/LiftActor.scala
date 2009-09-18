@@ -15,7 +15,7 @@
  */
 
 package net.liftweb.actor
-
+import base._
 import util._
 import Helpers._
 
@@ -55,11 +55,12 @@ object LAScheduler {
   def shutdown() {}
 }
 
-trait SpecializedLiftActor[T] {
+trait SpecializedLiftActor[T] extends SimpleActor[T]  {
+  @volatile
   private[this] var processing = false
-  private[this] val baseMailbox: MailboxItem = new SpecialMailbox
-  private[this] var msgList: List[T] = Nil
-  private[this] var startCnt = 0
+  @volatile  private[this] val baseMailbox: MailboxItem = new SpecialMailbox
+  @volatile private[this] var msgList: List[T] = Nil
+  @volatile private[this] var startCnt = 0
 
   private class MailboxItem(val item: T) {
     var next: MailboxItem = _
@@ -181,7 +182,8 @@ trait SpecializedLiftActor[T] {
   }
 }
 
-trait LiftActor extends SpecializedLiftActor[Any] {
+trait LiftActor extends SpecializedLiftActor[Any] with Actor {
+  @volatile
   private[this] var responseFuture: LAFuture[Any] = null
 
   private case class MsgWithResp(msg: Any, future: LAFuture[Any])

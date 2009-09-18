@@ -16,10 +16,11 @@
 
 package net.liftweb.actor
 
+import base._
 import util._
 import Helpers._
 
-class LAFuture[T] {
+class LAFuture[T] extends Future[T] {
   private var item: T = _
   private var satisfied = false
 
