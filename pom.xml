@@ -173,8 +173,8 @@ Lift is a scala web framework.
   <modules>
     <module>lift-base</module>
     <module>lift-json</module>
-    <module>lift-util</module>
     <module>lift-actor</module>
+    <module>lift-util</module>
     <module>lift</module>
     <module>lift-wizard</module>
     <module>lift-osgi</module>

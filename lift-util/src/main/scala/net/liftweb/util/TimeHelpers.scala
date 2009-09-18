@@ -1,9 +1,10 @@
 package net.liftweb.util
 import _root_.java.text.SimpleDateFormat
 import _root_.java.util.{TimeZone, Calendar, Date, Locale}
+import base._
 
 /*
- * Copyright 2006-2008 WorldWide Conferencing, LLC
+ * Copyright 2006-2009 WorldWide Conferencing, LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

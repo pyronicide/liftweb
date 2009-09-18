@@ -5,6 +5,7 @@ import _root_.org.specs.util.DataTables
 import _root_.org.specs.runner._
 import BasicTypesHelpers._
 import _root_.java.io.{InputStream, ByteArrayInputStream}
+import base._
 
 class BasicTypesHelpersTest extends JUnit4(BasicTypesHelpersSpec)
 object BasicTypesHelpersSpec extends Specification with DataTables {

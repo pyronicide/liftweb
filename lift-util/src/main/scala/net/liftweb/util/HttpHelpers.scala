@@ -20,6 +20,7 @@ import _root_.scala.xml.{NodeSeq, Elem, Node, Text, Group, UnprefixedAttribute, 
 import _root_.scala.collection.{Map}
 import _root_.scala.collection.mutable.HashMap
 import _root_.java.util.concurrent.atomic.AtomicLong
+import base._
 
 object HttpHelpers extends ListHelpers with StringHelpers
 
@@ -228,12 +229,12 @@ trait HttpHelpers { self: ListHelpers with StringHelpers  =>
     sb.toString
   }
 
+  /*
   /**
    * This appears to be unused. TODO: Remove?
    */
   private case class BailOut(seq: Long)
-  import _root_.scala.actors._
-  import Actor._
+
   def longPoll[T](seq: Long, timeout: Helpers.TimeSpan, func: PartialFunction[Any, T])(implicit m: Manifest[T]): Box[T] = {
     ActorPing.schedule(Actor.self, BailOut(seq), timeout)
     receive(func orElse {case BailOut(seq) => null}) match {
@@ -241,6 +242,7 @@ trait HttpHelpers { self: ListHelpers with StringHelpers  =>
       case r => Box.asA[T](r)(m)
     }
   }
+  */
 
   def findKids(in: NodeSeq, prefix: String, label: String): NodeSeq =
   in.filter(n => n.label == label && n.prefix == prefix).flatMap(_.child)

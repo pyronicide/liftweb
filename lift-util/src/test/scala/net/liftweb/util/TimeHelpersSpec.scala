@@ -10,6 +10,8 @@ import _root_.org.specs.Products._
 import _root_.org.specs.mock.Mocker
 import _root_.org.specs.ScalaCheck
 
+import base._
+
 class TimeHelpersTest extends JUnit4(TimeHelpersSpec)
 object TimeHelpersSpec extends Specification with TimeHelpers with TimeAmountsGen with ScalaCheck with Mocker with LoggerDelegation with ControlHelpers with ClassHelpers {
   "A TimeSpan" can {

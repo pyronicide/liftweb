@@ -6,6 +6,7 @@ import _root_.org.scalacheck.Arbitrary
 import _root_.org.scalacheck.{Prop, Gen}
 import _root_.org.scalacheck.Gen._
 import _root_.org.specs.ScalaCheck
+import base._
 
 class ClassHelpersSpecTest extends Runner(ClassHelpersSpec) with JUnit
 object ClassHelpersSpec extends Specification with ClassHelpers with ControlHelpers with StringGenerators with ScalaCheck {

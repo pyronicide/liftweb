@@ -17,6 +17,7 @@ package net.liftweb.util
 import _root_.scala.xml._
 import _root_.scala.xml.transform._
 import _root_.scala.collection.mutable.ListBuffer
+import base._
 
 import Helpers._
 

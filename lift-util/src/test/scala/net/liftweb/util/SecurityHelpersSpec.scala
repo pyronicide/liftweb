@@ -1,6 +1,7 @@
 package net.liftweb.util
 import _root_.org.specs._
 import _root_.java.io.ByteArrayInputStream
+import base._
 
 object SecurityHelpersSpec extends Specification with SecurityHelpers with IoHelpers with StringHelpers {
   "Security Helpers" should {

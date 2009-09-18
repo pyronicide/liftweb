@@ -16,6 +16,7 @@ package net.liftweb.util
 import _root_.org.apache.commons.collections.map.{LRUMap, AbstractLinkedMap}
 import _root_.org.apache.commons.collections.map.AbstractLinkedMap.LinkEntry
 import _root_.scala.collection.jcl.Conversions._
+import base._
 
 /**
  * LRU Cache wrapping {@link org.apache.commons.collections.map.LRUMap}

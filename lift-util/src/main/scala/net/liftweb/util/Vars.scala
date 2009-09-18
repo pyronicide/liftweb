@@ -16,6 +16,7 @@
 package net.liftweb.util
 
 import Helpers._
+import base._
 
 /**
  * Abstract a request or a session scoped variable.

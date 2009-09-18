@@ -15,6 +15,7 @@ package net.liftweb.util;
 
 import _root_.scala.util.parsing.combinator.{Parsers, ImplicitConversions}
 import Helpers._
+import base._
 
 object JSONParser extends SafeSeqParser with ImplicitConversions {
   implicit def strToInput(in: String): Input = new _root_.scala.util.parsing.input.CharArrayReader(in.toCharArray)

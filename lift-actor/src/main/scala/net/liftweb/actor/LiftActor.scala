@@ -16,8 +16,6 @@
 
 package net.liftweb.actor
 import base._
-import util._
-import Helpers._
 
 trait ILAExecute {
   def execute(f: () => Unit): Unit
@@ -178,7 +176,7 @@ trait SpecializedLiftActor[T] extends SimpleActor[T]  {
   protected def messageHandler: PartialFunction[T, Unit]
 
   protected def exceptionHandler: PartialFunction[Throwable, Unit] = {
-    case e => Log.error("Error processing Actor "+this, e)
+    case e => // FIXME logging Log.error("Error processing Actor "+this, e)
   }
 }
 
@@ -198,6 +196,12 @@ trait LiftActor extends SpecializedLiftActor[Any] with Actor {
     val future = new LAFuture[Any]
     this ! MsgWithResp(msg, future)
     future.get(timeout)
+  }
+
+  def !!(msg: Any): LAFuture[Any] = {
+    val future = new LAFuture[Any]
+    this ! MsgWithResp(msg, future)
+    future
   }
 
   override protected def testTranslate[R](v: Any, f: Any => R) = v match {

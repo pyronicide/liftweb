@@ -24,6 +24,8 @@ import _root_.org.scalacheck.Gen._
 import _root_.org.scalacheck.Prop._
 import _root_.org.scalacheck.Shrink._
 import _root_.org.specs.ScalaCheck
+import base._
+
 object ParserHelpers extends net.liftweb.util.CombParserHelpers with Parsers
 
 class CombParserHelpersSpecTest extends Runner(CombParserHelpersSpec) with JUnit with Console

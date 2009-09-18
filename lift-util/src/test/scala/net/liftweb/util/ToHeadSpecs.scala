@@ -17,6 +17,7 @@ package net.liftweb.util
 
 import _root_.org.specs._
 import _root_.org.specs.runner._
+import base._
 
 class ToHeadTest extends JUnit4(ToHeadSpecs)
 object ToHeadSpecs extends Specification {

@@ -14,8 +14,7 @@ package net.liftweb.actor
  */
 
 import _root_.java.util.concurrent._
-import util._
-import Helpers.TimeSpan
+
 /**
  * The ActorPing object schedules an actor to be ping-ed with a given message at specific intervals.
  * The schedule methods return a ScheduledFuture object which can be cancelled if necessary
@@ -42,12 +41,12 @@ object LAPinger {
    * @return a <code>ScheduledFuture</code> which sends the <code>msg</code> to
    * the <code>to<code> Actor after the specified TimeSpan <code>delay</code>.
    */
-  def schedule[T](to: SpecializedLiftActor[T], msg: T, delay: TimeSpan): ScheduledFuture[Unit] = {
+  def schedule[T](to: SpecializedLiftActor[T], msg: T, delay: Long): ScheduledFuture[Unit] = {
     val r = new Callable[Unit] {
       def call: Unit = { to ! msg }
     }
     try {
-      service.schedule(r, delay.millis, TimeUnit.MILLISECONDS)
+      service.schedule(r, delay, TimeUnit.MILLISECONDS)
     } catch {
       case e: RejectedExecutionException => throw PingerException(msg + " could not be scheduled on " + to, e)
     }

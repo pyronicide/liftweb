@@ -17,6 +17,7 @@ package net.liftweb.util
 import _root_.java.lang.reflect.{Method, Modifier, InvocationTargetException}
 import _root_.java.lang.reflect.Modifier._
 import _root_.scala.reflect.Manifest
+import base._
 
 object ClassHelpers extends ClassHelpers with ControlHelpers
 

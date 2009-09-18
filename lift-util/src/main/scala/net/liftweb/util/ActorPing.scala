@@ -13,10 +13,11 @@ package net.liftweb.util
  * limitations under the License.
  */
 
-import _root_.scala.actors.{Actor, Exit}
-import _root_.scala.actors.Actor._
 import _root_.java.util.concurrent._
 import Helpers.TimeSpan
+import _root_.net.liftweb.base._
+import base._
+
 /**
  * The ActorPing object schedules an actor to be ping-ed with a given message at specific intervals.
  * The schedule methods return a ScheduledFuture object which can be cancelled if necessary
@@ -43,7 +44,7 @@ object ActorPing {
    * @return a <code>ScheduledFuture</code> which sends the <code>msg</code> to
    * the <code>to<code> Actor after the specified TimeSpan <code>delay</code>.
    */
-  def schedule(to: Actor, msg: Any, delay: TimeSpan): ScheduledFuture[Unit] = {
+  def schedule[T](to: SimpleActor[T], msg: T, delay: TimeSpan): ScheduledFuture[Unit] = {
     val r = new _root_.java.util.concurrent.Callable[Unit] {
       def call: Unit = { Helpers.tryo( to ! msg ) }
     }
@@ -54,6 +55,7 @@ object ActorPing {
     }
   }
 
+  /*
   /**
    * Schedules the sending of the message <code>msg</code> to the <code>to<code> Actor,
    * after <code>initialDelay</code> and then subsequently every <code>delay</code> TimeSpan.
@@ -85,6 +87,7 @@ object ActorPing {
     }
     catch { case e => throw ActorPingException(msg + " could not be scheduled on " + to, e)}
   }
+  */
 
 }
 

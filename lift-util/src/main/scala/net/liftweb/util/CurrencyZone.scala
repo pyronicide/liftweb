@@ -18,6 +18,7 @@ package net.liftweb.util
 
 import _root_.java.util.Locale
 import _root_.java.text.{NumberFormat, DecimalFormat}
+import base._
 
 trait TwoFractionDigits {
     val numberOfFractionDigits = 2

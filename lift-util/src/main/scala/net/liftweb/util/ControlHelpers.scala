@@ -13,6 +13,9 @@ package net.liftweb.util
  * limitations under the License.
  */
 
+import base._
+
+
 object ControlHelpers extends ControlHelpers with ClassHelpers
 
 /**

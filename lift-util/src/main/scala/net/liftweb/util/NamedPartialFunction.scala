@@ -13,6 +13,9 @@ package net.liftweb.util
  * limitations under the License.
  */
 
+import base._
+
+
 /**
  * This trait is used to represent a PartialFunction with additional
  * associated metadata, a name that allows the NamedPartialFunction

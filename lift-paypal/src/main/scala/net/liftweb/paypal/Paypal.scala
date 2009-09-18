@@ -21,8 +21,6 @@ import _root_.org.apache.commons.httpclient._
 import _root_.org.apache.commons.httpclient.methods._
 import _root_.java.io._
 import _root_.scala.collection.mutable.ListBuffer
-import _root_.scala.actors.Actor
-import Actor._
 
 import _root_.scala.xml.{NodeSeq}
 

@@ -14,6 +14,7 @@
 package net.liftweb.util
 
 import scala.reflect.Manifest
+import base._
 
 trait ValueHolder {
   type ValueType

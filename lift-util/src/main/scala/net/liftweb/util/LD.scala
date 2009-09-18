@@ -14,11 +14,12 @@ package net.liftweb.util
  */
 
 import _root_.scala.collection.mutable.ListBuffer
+import base._
 
 /**
   * Calculate the edit distance between words
   */
-object LD extends Application {
+object LD {
   private def min(a: Int, b: Int): Int = if (a < b) a else b
   private def min(a: Int, b: Int, c: Int): Int = min(min(a,b), c)
 

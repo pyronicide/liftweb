@@ -16,6 +16,7 @@ package net.liftweb.util
 import _root_.scala.xml.{NodeSeq, Node, SpecialNode, Text, Elem,
                          Group, MetaData, Null, UnprefixedAttribute,
                          PrefixedAttribute}
+import base._
 
 /**
  * This trait is used to identify an object that is representable as a {@link NodeSeq}.

@@ -14,12 +14,12 @@ package net.liftweb.util
  */
 
 import _root_.scala.xml.{NodeSeq}
-import _root_.scala.actors._
-import Actor._
 import _root_.javax.mail._
 import _root_.javax.mail.internet._
 import _root_.javax.naming.{Context, InitialContext}
 import _root_.java.util.Properties
+import base._
+import actor._
 
 /**
  * Utilities for sending email.
@@ -121,10 +121,8 @@ object Mailer {
 
   // def host_=(hostname: String) = System.setProperty("mail.smtp.host", hostname)
 
-  private class MsgSender extends Actor {
-    def act = {
-      loop {
-        react {
+  private class MsgSender extends LiftActor {
+    protected def messageHandler = {
           case MessageInfo(from, subject, info) =>
             try {
               val session = authenticator match {
@@ -179,13 +177,11 @@ object Mailer {
 
           case _ => Log.warn("Email Send: Here... sorry")
         }
-      }
-    }
   }
 
   private val msgSender = {
     val ret = new MsgSender
-    ret.start
+    // ret.start
     ret
   }
 

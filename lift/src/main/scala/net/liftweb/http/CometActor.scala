@@ -16,8 +16,6 @@
 
 package net.liftweb.http
 
-import _root_.scala.actors.{Actor, Exit}
-import _root_.scala.actors.Actor._
 import _root_.scala.collection.mutable.{ListBuffer}
 import _root_.net.liftweb.util.Helpers._
 import _root_.net.liftweb.util._

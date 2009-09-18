@@ -2,9 +2,10 @@ package net.liftweb.util
 import _root_.java.util.regex._
 import _root_.java.lang.Character._
 import _root_.scala.xml.NodeSeq
+import base._
 
 /*
- * Copyright 2006-2008 WorldWide Conferencing, LLC
+ * Copyright 2006-2009 WorldWide Conferencing, LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

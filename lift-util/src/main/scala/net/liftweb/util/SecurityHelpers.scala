@@ -20,6 +20,7 @@ import _root_.java.security.{SecureRandom, MessageDigest}
 import _root_.javax.crypto._
 import _root_.javax.crypto.spec._
 import _root_.scala.xml.{Node, XML}
+import base._
 
 object SecurityHelpers extends StringHelpers with IoHelpers
 

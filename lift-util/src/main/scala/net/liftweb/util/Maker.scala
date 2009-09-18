@@ -19,6 +19,7 @@ package net.liftweb.util
 import _root_.java.util.concurrent.{ConcurrentHashMap => CHash}
 import _root_.java.lang.ThreadLocal
 import _root_.scala.reflect.Manifest
+import base._
 
 /**
  * A trait that does basic dependency injection.

@@ -13,6 +13,8 @@
 
 package net.liftweb.util
 
+import base._
+
 import _root_.java.util.concurrent.locks._
 
 class ConcurrentLock extends ReentrantReadWriteLock {

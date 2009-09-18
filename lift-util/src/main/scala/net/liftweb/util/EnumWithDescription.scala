@@ -16,6 +16,8 @@ package net.liftweb.util
  * and limitations under the License.
  */
 
+import base._
+
 /*
  A wrapper arround a Scala Enumeration Value that has a name, description for each object
  */

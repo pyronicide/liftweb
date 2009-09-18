@@ -20,8 +20,6 @@ import _root_.net.liftweb.util.Helpers._
 import _root_.net.liftweb.http._
 import _root_.org.apache.commons.codec.binary._
 import _root_.scala.collection.mutable.{HashMap}
-import _root_.scala.actors.Actor
-import _root_.scala.actors.Actor._
 
 /**
  * All http authentication methods must implement these methods.

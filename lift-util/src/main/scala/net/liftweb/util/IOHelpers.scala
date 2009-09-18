@@ -16,6 +16,7 @@ package net.liftweb.util
 import _root_.java.io.{InputStream, ByteArrayOutputStream, ByteArrayInputStream, Reader, File, FileInputStream, BufferedReader, InputStreamReader}
 import _root_.scala.collection.mutable.{HashSet, ListBuffer}
 import ControlHelpers._
+import base._
 
 object IoHelpers extends IoHelpers
 

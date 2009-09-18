@@ -15,8 +15,6 @@
  */
 package net.liftweb.http
 
-import _root_.scala.actors.Actor
-import _root_.scala.actors.Actor._
 import _root_.scala.collection.mutable.{HashMap, ArrayBuffer, ListBuffer}
 import _root_.scala.xml.{NodeSeq, Unparsed, Text}
 import _root_.net.liftweb.util._

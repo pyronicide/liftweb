@@ -17,12 +17,10 @@
 package net.liftweb.actor
 
 import base._
-import util._
-import Helpers._
 
 class LAFuture[T] extends Future[T] {
-  private var item: T = _
-  private var satisfied = false
+  @volatile private[this] var item: T = _
+  @volatile private[this] var satisfied = false
 
   def satisfy(value: T): Unit = synchronized {
     if (!satisfied) {
@@ -41,11 +39,11 @@ class LAFuture[T] extends Future[T] {
     }
   }
 
-  def get(timeout: TimeSpan): Box[T] = synchronized {
+  def get(timeout: Long): Box[T] = synchronized {
     if (satisfied) Full(item)
     else {
       try {
-        wait(timeout.millis)
+        wait(timeout)
         if (satisfied) Full(item)
         else Empty
       } catch {

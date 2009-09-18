@@ -19,6 +19,7 @@ package net.liftweb.util
 import _root_.java.net.InetAddress
 import _root_.java.util.Properties
 import Helpers._
+import base._
 
 /**
  * Configuration management utilities.

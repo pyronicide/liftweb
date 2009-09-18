@@ -16,6 +16,7 @@ package net.liftweb.util
 
 import _root_.java.util.regex.{Pattern, Matcher}
 import _root_.scala.collection.mutable.ListBuffer
+import base._
 
 /**
  * A regular expressions helper library

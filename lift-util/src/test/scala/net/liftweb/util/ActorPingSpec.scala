@@ -18,9 +18,9 @@ package net.liftweb.util
 import _root_.org.specs._
 import _root_.org.specs.util.WaitFor
 import _root_.org.specs.runner._
-import _root_.scala.actors.Actor
 import _root_.java.util.concurrent._
 import Helpers._
+import base._
 
 class ActorPingSpecTest extends JUnit4(ActorPingSpec)
 object ActorPingSpec extends Specification with PingedService with WaitFor {

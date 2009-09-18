@@ -19,8 +19,6 @@ import _root_.java.net.URLDecoder
 import _root_.scala.xml.{Node, NodeSeq,Group, Elem, MetaData, Null, XML, Comment, Text}
 import _root_.scala.collection.immutable.HashMap
 import _root_.scala.xml.transform._
-import _root_.scala.actors._
-import _root_.scala.actors.Actor._
 import _root_.net.liftweb.util.Helpers._
 import _root_.net.liftweb.util._
 import _root_.net.liftweb.util.Helpers

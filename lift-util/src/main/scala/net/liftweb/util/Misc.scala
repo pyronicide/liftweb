@@ -17,6 +17,7 @@
 package net.liftweb.util
 
 import _root_.scala.xml.NodeSeq
+import base._
 
 trait HasParams {
   def param(name: String): Box[String]

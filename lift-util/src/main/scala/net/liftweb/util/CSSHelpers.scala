@@ -18,7 +18,7 @@ package net.liftweb.util
 import _root_.scala.util.parsing.combinator._
 import _root_.scala.util.parsing.combinator.syntactical._
 import _root_.scala.util.parsing.combinator.lexical._
-
+import base._
 import _root_.java.io._
 
 object CSSHelpers extends ControlHelpers {

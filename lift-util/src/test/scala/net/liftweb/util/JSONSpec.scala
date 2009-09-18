@@ -3,6 +3,7 @@ import _root_.org.specs._
 import _root_.scala.util.parsing.input._
 import _root_.org.specs.runner._
 import _root_.scala.util.parsing.combinator.Parsers
+import base._
 
 class JSONSpecTest extends Runner(JSONSpec) with Console with JUnit
 object JSONSpec extends Specification {
