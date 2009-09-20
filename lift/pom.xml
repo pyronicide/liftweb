@@ -185,4 +185,17 @@
       </plugin>
     </plugins>
   </build>
+  <profiles>
+    <profile>
+      <id>actorized</id>
+      <dependencies>
+        <dependency>
+          <groupId>${project.groupId}</groupId>
+          <artifactId>lift-actor</artifactId>
+          <version>${project.version}</version>
+          <classifier>actorized</classifier>
+        </dependency>
+      </dependencies>
+    </profile>
+  </profiles>
 </project>
