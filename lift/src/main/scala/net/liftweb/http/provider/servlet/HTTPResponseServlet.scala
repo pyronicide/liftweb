@@ -22,11 +22,15 @@ class HTTPResponseServlet(resp: HttpServletResponse) extends HTTPResponse {
 
   def encodeUrl(url: String): String = resp encodeURL url
 
-  def addHeaders(headers: List[HTTPParam]) =
+  def addHeaders(headers: List[HTTPParam]) {
+
     for (h <- headers;
-         value <- h.values) yield {
+         value <- h.values) {
+      if (h.name equalsIgnoreCase "expires") resp.setHeader(h.name, value)
+      else
       resp.addHeader(h.name, value)
     }
+  }
 
   def setStatus(status: Int) = resp setStatus status
 
