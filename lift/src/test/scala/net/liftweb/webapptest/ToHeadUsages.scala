@@ -84,5 +84,31 @@ object ToHeadUsages extends Specification {
 
   }
 
+  "deferred snippets" should {
+    "render" >> {
+      JettyTestServer.browse(
+        "/deferred",html => {
+          html.assertElementPresent("second")
+        }
+      )
+    }
+
+    "not deferred not in actor" >> {
+      JettyTestServer.browse(
+        "/deferred",html => {
+          html.assertElementPresentByXPath("/html/body/span[@id='whack1']/span[@id='actor_false']")
+        }
+      )
+    }
+
+    "deferred in actor" >> {
+      JettyTestServer.browse(
+        "/deferred",html => {
+          html.assertElementPresentByXPath("/html/body/span[@id='whack2']/span[@id='actor_true']")
+        }
+      )
+    }
+  }
+
   //  JettyTestServer.stop()
 }

@@ -71,6 +71,12 @@ abstract class RequestVar[T](dflt: => T) extends AnyVar[T, RequestVar[T]](dflt) 
     old
   }
 
+  /**
+  * Generate a function that will take a snapshot of the current RequestVars
+  * such that they can be restored
+  */
+ final def generateSnapshotRestorer[T](): Function1[Function0[T], T] = RequestVarHandler.generateSnapshotRestorer()
+
   override protected def registerCleanupFunc(in: Box[LiftSession] => Unit): Unit =
   RequestVarHandler.addCleanupFunc(in)
 }
@@ -84,6 +90,30 @@ private[http] object RequestVarHandler {
   private val cleanup: ThreadGlobal[ListBuffer[Box[LiftSession] => Unit]] = new ThreadGlobal
   private val isIn: ThreadGlobal[String] = new ThreadGlobal
   private val sessionThing: ThreadGlobal[Box[LiftSession]] = new ThreadGlobal
+
+
+  /**
+  * Generate a function that will take a snapshot of the current RequestVars
+  * such that they can be restored
+  */
+  final def generateSnapshotRestorer[T](): Function1[Function0[T], T] =
+  {
+    val myVals = vals.value
+    val mySessionThing = sessionThing.value
+
+    f => isIn.doWith("in") (
+      vals.doWith(myVals) (
+        cleanup.doWith(new ListBuffer) {
+          sessionThing.doWith(mySessionThing) {
+            val ret: T = f()
+
+            cleanup.value.toList.foreach(clean => Helpers.tryo(clean(sessionThing.value)))
+
+            ret
+          }
+        }
+      ))
+  }
 
   private[http] def get[T](name: String): Box[T] =
   for (ht <- Box.legacyNullTest(vals.value);

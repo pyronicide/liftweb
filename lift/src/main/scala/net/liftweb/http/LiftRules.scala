@@ -463,6 +463,69 @@ object LiftRules extends Factory {
 
   def siteMap: Box[SiteMap] = _sitemap
 
+  /**
+   * How long should we wait for all the lazy snippets to render
+   */
+  val lazySnippetTimeout: FactoryMaker[TimeSpan] = new FactoryMaker(() => 30 seconds) {}
+
+  /**
+  * If a deferred snippet has a failure during render,
+  * what should we display?
+  */
+  val deferredSnippetFailure: FactoryMaker[Failure => NodeSeq] =
+  new FactoryMaker(() => {failure: Failure => {
+        if (Props.devMode)
+        <div style="border: red solid 2px">
+          A do:lazy snippet failed to render.  Message: {failure.msg}
+          {
+            failure.exception match {
+              case Full(e) =>
+                <pre>{
+                    e.getStackTrace.map(_.toString).mkString("\n")
+                  }</pre>
+              case _ => NodeSeq.Empty
+            }
+          }
+
+          <i>note: this error is displayed in the browser because
+            your application is running in "development" mode.  If you
+            set the system property run.mode=production, this error will not
+            be displayed, but there will be errors in the output logs.
+          </i>
+        </div>
+        else NodeSeq.Empty
+      }}) {}
+
+   /**
+  * If a deferred snippet has a failure during render,
+  * what should we display?
+  */
+  val deferredSnippetTimeout: FactoryMaker[() => NodeSeq] =
+  new FactoryMaker(() => {() => {
+        if (Props.devMode)
+        <div style="border: red solid 2px">
+          A deferred snippet timed out during render.
+
+          <i>note: this error is displayed in the browser because
+            your application is running in "development" mode.  If you
+            set the system property run.mode=production, this error will not
+            be displayed, but there will be errors in the output logs.
+          </i>
+        </div>
+        else NodeSeq.Empty
+      }}) {}
+
+ /**
+  * Should comments be stripped from the served XHTML
+  */
+  val stripComments: FactoryMaker[() => Boolean] =
+  new FactoryMaker(() => {() => {
+        if (Props.devMode)
+        false
+        else true
+      }}) {}
+
+
   private[http] var ending = false
 
   private[http] var doneBoot = false;
@@ -787,7 +850,7 @@ object LiftRules extends Factory {
    * be copied from the snippet invocation tag to the form tag.  The
    * default list is "class", "id", "target", "style", "onsubmit"
    */
-   val formAttrs: FactoryMaker[List[String]] = new FactoryMaker(() => List("class", "id", "target", "style", "onsubmit")) {}
+  val formAttrs: FactoryMaker[List[String]] = new FactoryMaker(() => List("class", "id", "target", "style", "onsubmit")) {}
 
   /**
    * A utility method to convert an exception to a string of stack traces
