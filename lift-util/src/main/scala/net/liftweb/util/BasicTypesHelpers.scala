@@ -43,6 +43,21 @@ trait BasicTypesHelpers {
 	}
     }
 
+  /*
+  implicit def seqNBuilder[T, Q <: Node]: BuilderFactory[Q, Seq[Q], Seq[T]] =
+    new BuilderFactory[Q, Seq[Q], Seq[T]] {
+      def apply(from: Seq[T]) = 
+	new Builder[Q, Seq[Q]] {
+	  private[this] val buffer = new scala.collection.mutable.ListBuffer[Q]
+	  def clear = buffer.clear
+	  def +=(n: Q) = {
+	    buffer += n
+	    this
+	  }
+	  def result: Seq[Q] = buffer.toList
+	}
+    }
+*/
 
   /**
    * Allows an implicit transform from a Boolean to a Boolean2, allowing expressions such as:
