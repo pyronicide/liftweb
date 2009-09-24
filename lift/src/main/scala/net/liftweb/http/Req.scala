@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions
  * and limitations under the License.
  */
-package net.liftweb.http
+package net.liftweb
+package http
 
 import _root_.net.liftweb.util.Helpers
 import Helpers._
@@ -171,7 +172,7 @@ object Req {
         }) openOr (Nil, localParams, Nil, Empty)
     } else if (contentType.dmap(false)(_.toLowerCase.startsWith("application/x-www-form-urlencoded"))) {
       // val tmp = paramNames.map{n => (n, xlateIfGet(request.getParameterValues(n).toList))}
-      val params = localParams ++ (request.params.sort{(s1, s2) => s1.name < s2.name}).map(n => (n.name, n.values))
+      val params = localParams ++ (request.params.sortWith{(s1, s2) => s1.name < s2.name}).map(n => (n.name, n.values))
       (request paramNames, params, Nil, Empty)
     } else {
       (Nil,localParams, Nil, tryo(readWholeStream(request inputStream)))

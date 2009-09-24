@@ -42,9 +42,9 @@ trait IoHelpers {
       var stdOut = ""
       var stdErr = ""
       val proc = Runtime.getRuntime.exec(cmds.toArray)
-      val t1 = new Thread(new ReadItAll(proc.getInputStream, stdOut = _))
+      val t1 = new Thread(new ReadItAll(proc.getInputStream, s => stdOut = s))
       t1.start
-      val t2 = new Thread(new ReadItAll(proc.getErrorStream, stdErr = _))
+      val t2 = new Thread(new ReadItAll(proc.getErrorStream, s => stdErr = s))
       val res = proc.waitFor
       t1.join
       t2.join
@@ -60,7 +60,7 @@ trait IoHelpers {
    * the resulting data into a string.
    */
   def readWholeThing(in: Reader): String = {
-    val bos = new StringBuilder
+    val bos = new java.lang.StringBuilder
     val ba = new Array[Char](4096)
 
     def readOnce {

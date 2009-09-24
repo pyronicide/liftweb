@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions
  * and limitations under the License.
  */
-package net.liftweb.http.js
+package net.liftweb
+package http
+package js
 
 import _root_.net.liftweb.http._
 import _root_.net.liftweb.util._

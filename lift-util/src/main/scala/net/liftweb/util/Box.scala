@@ -1,7 +1,8 @@
-package net.liftweb.util
+package net.liftweb
+package util
 
 /*
- * Copyright 2007-2008 WorldWide Conferencing, LLC
+ * Copyright 2007-2009 WorldWide Conferencing, LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -331,7 +332,7 @@ final case class Full[+A](value: A) extends Box[A] {
 
   override def flatMap[B](f: A => Box[B]): Box[B] = f(value)
 
-  override def elements: Iterator[A] = Iterator.fromValues(value)
+  override def elements: Iterator[A] = Iterator(value)
 
   override def toList: List[A] = List(value)
 
@@ -430,9 +431,24 @@ sealed case class Failure(msg: String, exception: Box[Throwable], chain: Box[Fai
  * allow an application to store other information related to the failure.
  */
 @serializable
-final case class ParamFailure[T](override val msg: String,
-				 override val exception: Box[Throwable],
-				 override val chain: Box[Failure], param: T) extends
+final class ParamFailure[T](override val msg: String,
+			    override val exception: Box[Throwable],
+			    override val chain: Box[Failure], val param: T) extends
 Failure(msg, exception, chain)
+
+object ParamFailure {
+  def apply[T](msg: String,
+	       exception: Box[Throwable],
+	       chain: Box[Failure], param: T) = 
+		 new ParamFailure[T](msg, exception, chain, param)
+
+  def unapply[T](in: Box[T]): Option[(String, Box[Throwable], Box[Failure], T)] =
+    in match {
+      case pf: ParamFailure[T] => Some((pf.msg, pf.exception,
+				      pf.chain, pf.param))
+      case _ => None
+    }
+  
+}
 
 // vim: set ts=2 sw=2 et:

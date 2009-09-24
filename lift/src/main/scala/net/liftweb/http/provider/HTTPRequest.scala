@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions
  * and limitations under the License.
  */
-package net.liftweb.http.provider
+package net.liftweb
+package http
+package provider
 
 import _root_.java.io.{InputStream}
 import _root_.java.util.{Locale}
@@ -42,7 +44,7 @@ trait HTTPRequest {
    * @return - the header value. Empty if there is no such header 
    */
   def header(name: String): Box[String] =
-  headers.filter(_.name.equalsIgnoreCase(name)).firstOption.flatMap(_.values.firstOption)
+  headers.filter(_.name.equalsIgnoreCase(name)).headOption.flatMap(_.values.headOption)
 
   /**
    * Return the header values by the given name.

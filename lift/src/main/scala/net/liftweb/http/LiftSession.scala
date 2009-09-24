@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions
  * and limitations under the License.
  */
-package net.liftweb.http
+package net.liftweb
+package http
 
 import _root_.scala.actors.Actor
 import _root_.scala.actors.Actor._
@@ -285,7 +286,7 @@ class LiftSession(val _contextPath: String, val uniqueId: String,
   }
 
   private[http] def exitComet(what: AnyActor): Unit = synchronized {
-    cometList = cometList.remove(_ eq what)
+    cometList = cometList.filterNot(_ eq what)
   }
 
   private case class RunnerHolder(name: String, func: S.AFuncHolder, owner: Box[String])
@@ -306,7 +307,7 @@ class LiftSession(val _contextPath: String, val uniqueId: String,
       // get all the commands, sorted by owner,
       (state.uploadedFiles.map(_.name) ::: state.paramNames).
       flatMap{n => synchronized{messageCallback.get(n)}.map(mcb => RunnerHolder(n, mcb, mcb.owner))}.
-      sort{
+      sortWith {
         case ( RunnerHolder(_, _, Full(a)), RunnerHolder(_, _, Full(b))) if a < b => true
         case (RunnerHolder(_, _, Full(a)), RunnerHolder(_, _, Full(b))) if a > b => false
         case (RunnerHolder(an, _, Full(a)), RunnerHolder(bn, _, Full(b))) if a == b => an < bn
@@ -387,7 +388,7 @@ class LiftSession(val _contextPath: String, val uniqueId: String,
   }
 
   private[http] def doCometActorCleanup(): Unit = {
-    val acl = synchronized {this.asyncComponents.values.toList}
+    val acl = synchronized {this.asyncComponents.valuesIterator.toList}
     acl.foreach(_ ! ShutdownIfPastLifespan)
   }
 
@@ -410,7 +411,7 @@ class LiftSession(val _contextPath: String, val uniqueId: String,
   private[http] def cleanupUnseenFuncs(): Unit = synchronized {
     if (LiftRules.enableLiftGC) {
       val now = millis
-      messageCallback.keys.toList.foreach{k =>
+      messageCallback.keysIterator.toList.foreach{k =>
         val f = messageCallback(k)
         if (!f.sessionLife && f.owner.isDefined && (now - f.lastSeen) > LiftRules.unusedFunctionsLifeTime) {
           messageCallback -= k
@@ -806,7 +807,10 @@ class LiftSession(val _contextPath: String, val uniqueId: String,
   }
 
   private[http] def checkRedirect(resp: LiftResponse): LiftResponse = resp match {
-    case RedirectWithState(uri, state, cookies @ _*) =>
+    case r: RedirectWithState =>
+      val uri = r.uri
+    val state = r.state
+    val cookies = r.cookies
       state.msgs.foreach(m => S.message(m._1, m._2))
       notices = S.getNotices
       RedirectResponse(attachRedirectFunc(uri, state.func), cookies:_*)
@@ -882,11 +886,11 @@ class LiftSession(val _contextPath: String, val uniqueId: String,
    */
   def findAndProcessTemplate(name: List[String]): Box[Elem] = {
     def findElem(in: NodeSeq): Box[Elem] =
-    in.toList.flatMap {
+    Box(in.toList.flatMap {
       case e: Elem => Some(e)
       case _ => None
-    } firstOption
-
+    } headOption)
+	
     for {
       template <- findAnyTemplate(name, S.locale) ?~ ("Template "+name+" not found")
       res <- findElem(processSurroundAndInclude(name.mkString("/", "/", ""), template))
@@ -965,7 +969,7 @@ class LiftSession(val _contextPath: String, val uniqueId: String,
     def locateAndCacheSnippet(cls: String): Box[AnyRef] =
     snippetMap.is.get(cls) or {
       val ret = LiftRules.snippet(cls) or findSnippetInstance(cls)
-      ret.foreach(s => snippetMap.is(cls) = s)
+      ret.foreach(s => snippetMap.set(snippetMap.is + (cls -> s)))
       ret
     }
 
@@ -1028,7 +1032,7 @@ class LiftSession(val _contextPath: String, val uniqueId: String,
     def checkAttr(attr_name: String, in: MetaData, base: MetaData): MetaData =
     in.filter(_.key == attr_name).toList match {
       case Nil => base
-      case x => new UnprefixedAttribute(attr_name, Text(x.first.value.text),
+      case x => new UnprefixedAttribute(attr_name, Text(x.head.value.text),
                                         base)
     }
 
@@ -1117,7 +1121,7 @@ class LiftSession(val _contextPath: String, val uniqueId: String,
    * Finds all Comet actors by type
    */
   def findComet(theType: String): List[CometActor] = synchronized {
-    asyncComponents.elements.filter{case ((Full(name), _), _) => name == theType case _ => false}.toList.map{case (_, value) => value}
+    asyncComponents.filter{case ((Full(name), _), _) => name == theType case _ => false}.toList.map{case (_, value) => value}
   }
 
   private object cometSetup extends RequestVar[List[((Box[String], Box[String]), Any)]](Nil)
@@ -1179,7 +1183,7 @@ class LiftSession(val _contextPath: String, val uniqueId: String,
     messageCallback -= act.jsonCall.funcId
     asyncComponents -= (act.theType -> act.name)
     val id = Full(act.uniqueId)
-    messageCallback.keys.toList.foreach{
+    messageCallback.keysIterator.toList.foreach{
       k =>
       val f = messageCallback(k)
       if (f.owner == id) {
@@ -1229,7 +1233,7 @@ class LiftSession(val _contextPath: String, val uniqueId: String,
       case f@ Failure(msg, be, _) if Props.devMode =>
         failedFind(f)
       case Full(s) => bind(atWhat, s)
-      case _ => atWhat.values.flatMap(_.elements).toList
+      case _ => atWhat.valuesIterator.flatMap(_.iterator).toList
     }
   }
 
@@ -1339,7 +1343,7 @@ object TemplateFinder {
         case _ =>
           val pls = places.mkString("/","/", "")
 
-          val se = suffixes.elements
+          val se = suffixes.iterator
           val sl = List("_"+locale.toString, "_"+locale.getLanguage, "")
 
           var found = false
@@ -1347,7 +1351,7 @@ object TemplateFinder {
 
           while (!found && se.hasNext) {
             val s = se.next
-            val le = sl.elements
+            val le = sl.iterator
             while (!found && le.hasNext) {
               val p = le.next
               val name = pls + p + (if (s.length > 0) "." + s else "")

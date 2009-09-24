@@ -47,12 +47,12 @@ trait ClassHelpers { self: ControlHelpers =>
    */
   def findClass[C <: AnyRef](name: String, where: List[String], modifiers: List[Function1[String, String]], targetType: Class[C]): Box[Class[C]] =
   (for (
-      place <- where.projection;
-      mod <- modifiers.projection;
+      place <- where;
+      mod <- modifiers;
       val fullName = place + "." + mod(name);
       val ignore = List(classOf[ClassNotFoundException], classOf[ClassCastException]);
       klass <- tryo(ignore)(Class.forName(fullName).asSubclass(targetType).asInstanceOf[Class[C]])
-    ) yield klass).firstOption
+    ) yield klass).headOption
 
   /**
    * General method to in find a class according to its type, its name, a list of possible
@@ -134,7 +134,7 @@ trait ClassHelpers { self: ControlHelpers =>
   (for (
       (name, packages) <- where.projection;
       klass <- findType[C](name, packages)
-    ) yield klass).firstOption
+    ) yield klass).headOption
 
   /**
    * Find a class given a list of possible names and corresponding packages, turning underscored
@@ -166,7 +166,7 @@ trait ClassHelpers { self: ControlHelpers =>
     if (name == null)
     ""
     else
-    List.toString(loop('_' :: name.toList))
+    loop('_' :: name.toList).mkString("")
   }
 
   /**
@@ -199,7 +199,7 @@ trait ClassHelpers { self: ControlHelpers =>
     if (name.isEmpty)
     ""
     else
-    List.toString(Character.toLowerCase(name.charAt(0)) :: loop(name.substring(1).toList))
+    (Character.toLowerCase(name.charAt(0)) :: loop(name.substring(1).toList)).mkString("")
   }
 
   /**
@@ -361,7 +361,7 @@ trait ClassHelpers { self: ControlHelpers =>
      }
      }
      */
-    possibleMethods.elements.filter(m => inst != null || isStatic(m.getModifiers)).
+    possibleMethods.filter(m => inst != null || isStatic(m.getModifiers)).
     map((m: Method) => tryo{m.invoke(inst, params : _*)}).
     find((x: Box[Any]) => x match {
         case result@Full(_) => true

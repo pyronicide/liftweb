@@ -13,11 +13,14 @@
  * See the License for the specific language governing permissions
  * and limitations under the License.
  */
-package net.liftweb.http.provider
+package net.liftweb
+package http
+package provider
 
 import _root_.net.liftweb.util._
 import _root_.java.util.{Locale, ResourceBundle}
 import Helpers._
+
 
 /**
  * Implement this trait in order to integrate Lift with other underlaying web containers. Not necessarily JEE containers.

@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions
  * and limitations under the License.
  */
-package net.liftweb.http
+package net.liftweb
+package http
 
 import _root_.scala.xml.{Node, Unparsed, Group, NodeSeq}
 import _root_.net.liftweb.util._
@@ -106,7 +107,7 @@ object Qop extends Enumeration(0, "auth", "auth-int", "auth,auth-int") {
 /**
  * 401 Unauthorized Response.
  */
-case class UnauthorizedDigestResponse(override val realm: String, qop: Qop.Value, nonce: String, opaque: String) extends UnauthorizedResponse(realm) {
+class UnauthorizedDigestResponse(override val realm: String, qop: Qop.Value, nonce: String, opaque: String) extends UnauthorizedResponse(realm) {
   override def toResponse = InMemoryResponse(Array(), List("WWW-Authenticate" -> (
         "Digest realm=\"" + realm + "\", " +
         "qop=\"" + qop + "\", " +
@@ -288,7 +289,7 @@ object DoRedirectResponse {
   def apply(url: String): LiftResponse = RedirectResponse(url, Nil :_*)
 }
 
-case class RedirectWithState(override val uri: String, state : RedirectState, override val cookies: HTTPCookie*) extends  RedirectResponse(uri, cookies:_*)
+class RedirectWithState(uri: String, val state: RedirectState, cookies: HTTPCookie*) extends  RedirectResponse(uri, cookies:_*)
 
 object RedirectState {
   def apply(f: () => Unit, msgs: (String, NoticeType.Value)*): RedirectState = new RedirectState(Full(f), msgs :_*)
@@ -296,10 +297,10 @@ object RedirectState {
 case class RedirectState(func: Box[() => Unit], msgs : (String, NoticeType.Value)*)
 
 object MessageState {
-  implicit def tuple2MessageState(msg : (String, NoticeType.Value)) = MessageState(msg)
+  implicit def tuple2MessageState(msg : (String, NoticeType.Value)) = new MessageState(msg)
 }
 
-case class MessageState(override val msgs: (String, NoticeType.Value)*) extends RedirectState(Empty, msgs :_*)
+class MessageState(override val msgs: (String, NoticeType.Value)*) extends RedirectState(Empty, msgs :_*)
 
 /**
  * Stock XHTML doctypes available to the lift programmer.

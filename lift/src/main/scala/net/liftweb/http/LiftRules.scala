@@ -14,7 +14,8 @@
  * and limitations under the License.
  */
 
-package net.liftweb.http;
+package net.liftweb
+package http
 
 import _root_.net.liftweb.util._
 import _root_.net.liftweb.util.Helpers._
@@ -283,7 +284,7 @@ object LiftRules extends Factory {
     import builtin.snippet._
 
     val func: (() => List[NodeSeq], String, MetaData) => NodeSeq = (f, title, attr) => f() map (e => <li>{e}</li>) match {
-      case Nil => Nil
+      case x if x.isEmpty => NodeSeq.Empty
       case list => <div>{title}<ul>{list}</ul></div> % attr
     }
 
@@ -297,10 +298,9 @@ object LiftRules extends Factory {
       }
     }
 
-    val groupMessages = xml match {
-      case Nil => JsCmds.Noop
-      case _ => LiftRules.jsArtifacts.setHtml(LiftRules.noticesContainerId, xml)
-    }
+    val groupMessages = 
+      if (xml.isEmpty) JsCmds.Noop
+      else LiftRules.jsArtifacts.setHtml(LiftRules.noticesContainerId, xml)
 
     val g = S.idMessages _
     List((MsgErrorMeta.get, g(S.errors)),

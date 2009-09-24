@@ -107,7 +107,7 @@ class CalendarDayView(val when: Calendar, val meta: DayViewMeta) {
         val cal = Calendar getInstance;
         cal set(HOUR_OF_DAY, 0)
         cal set(MINUTE, 0)
-        for (val i <- 0 to 23) yield
+        for (i <- 0 to 23) yield
         try{
           <tr>
             <td class="dayHour"><div>{Unparsed(meta.timeFormatter format(cal getTime))}</div></td>

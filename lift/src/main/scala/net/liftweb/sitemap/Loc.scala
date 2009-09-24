@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions
  * and limitations under the License.
  */
-package net.liftweb.sitemap
+package net.liftweb
+package sitemap
 
 import _root_.net.liftweb.http._
 import _root_.net.liftweb.util._
@@ -189,7 +190,7 @@ trait Loc[ParamType] {
    * Look for the Loc.Template in the param list
    */
   lazy val paramTemplate: Box[Loc.Template] =
-  allParams.flatMap{case v: Loc.Template => Some(v) case _ => None}.firstOption
+  allParams.flatMap{case v: Loc.Template => Some(v) case _ => None}.headOption
 
 
   private def findTitle(lst: List[Loc.LocParam]): Box[Loc.Title[ParamType]] = lst match {
@@ -343,7 +344,7 @@ object Loc {
   }
 
   def checkProtected(link: Link[_], params: List[LocParam]) {
-    params.map(lp => {
+    params.foreach(lp => {
         lp match {
           case Loc.HttpAuthProtected(role) => LiftRules.httpAuthProtectedResource.append (
               new LiftRules.HttpAuthProtectedResourcePF() {
@@ -532,14 +533,14 @@ object Loc {
   implicit def strLstToLink(in: Seq[String]): Link[NullLocParams] = new Link[NullLocParams](in.toList)
   implicit def strPairToLink(in: (Seq[String], Boolean)): Link[NullLocParams] = new Link[NullLocParams](in._1.toList, in._2)
   implicit def strToFailMsg(in: => String): FailMsg =
-  () => RedirectWithState(LiftRules.siteMapFailRedirectLocation.
-                      mkString("/", "/", ""),
-                      RedirectState(Empty, in -> NoticeType.Error))
+  () => new RedirectWithState(LiftRules.siteMapFailRedirectLocation.
+			      mkString("/", "/", ""),
+			      RedirectState(Empty, in -> NoticeType.Error))
 
   implicit def strFuncToFailMsg(in: () => String): FailMsg =
-  () => RedirectWithState(LiftRules.siteMapFailRedirectLocation.
-                      mkString("/", "/", ""),
-                      RedirectState(Empty, in() -> NoticeType.Error))
+  () => new RedirectWithState(LiftRules.siteMapFailRedirectLocation.
+			      mkString("/", "/", ""),
+			      RedirectState(Empty, in() -> NoticeType.Error))
 
   implicit def redirectToFailMsg(in: => RedirectResponse): FailMsg = () => in
 

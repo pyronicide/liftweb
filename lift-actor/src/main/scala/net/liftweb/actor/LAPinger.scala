@@ -1,4 +1,5 @@
-package net.liftweb.actor
+package net.liftweb
+package actor
 
 /*
  * Copyright 2007-2009 WorldWide Conferencing, LLC
@@ -13,7 +14,7 @@ package net.liftweb.actor
  * limitations under the License.
  */
 
-import _root_.java.util.concurrent._
+import java.util.concurrent._
 import util._
 import Helpers.TimeSpan
 /**

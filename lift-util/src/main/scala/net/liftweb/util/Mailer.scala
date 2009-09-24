@@ -134,11 +134,11 @@ object Mailer {
 
               val message = new MimeMessage(session)
               message.setFrom(from)
-              message.setRecipients(Message.RecipientType.TO, info.flatMap{case x: To => Some[To](x) case _ => None})
+              message.setRecipients(Message.RecipientType.TO, info.flatMap{case x: To => List[To](x) case _ => Nil})
               message.setRecipients(Message.RecipientType.CC, info.flatMap{case x: CC => Some[CC](x) case _ => None})
               message.setRecipients(Message.RecipientType.BCC, info.flatMap{case x: BCC => Some[BCC](x) case _ => None})
               // message.setReplyTo(filter[MailTypes, ReplyTo](info, {case x @ ReplyTo(_) => Some(x); case _ => None}))
-              message.setReplyTo(info.flatMap{case x: ReplyTo => Some[ReplyTo](x) case _ => None})
+              message.setReplyTo(info.toArray.flatMap{case x: ReplyTo => Some[Address](x) case _ => None})
               message.setSubject(subject.subject)
               val multiPart = new MimeMultipart("alternative")
               info.flatMap{case x: MailBodyType => Some[MailBodyType](x); case _ => None}.foreach {

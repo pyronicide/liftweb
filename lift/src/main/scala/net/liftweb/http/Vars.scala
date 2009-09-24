@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions
  * and limitations under the License.
  */
-package net.liftweb.http
+package net.liftweb
+package http
 
 import _root_.net.liftweb.util._
 import Helpers._
@@ -76,7 +77,7 @@ abstract class RequestVar[T](dflt: => T) extends AnyVar[T, RequestVar[T]](dflt) 
 }
 
 trait CleanRequestVarOnSessionTransition {
-  self: RequestVar[_] =>
+  self: RequestVar[T forSome {type T}] =>
 }
 
 private[http] object RequestVarHandler {

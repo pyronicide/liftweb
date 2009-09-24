@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions
  * and limitations under the License.
  */
-package net.liftweb.http
+package net.liftweb
+package http
 
 import _root_.java.net.URLDecoder
 import _root_.scala.xml.{Node, NodeSeq,Group, Elem, MetaData, Null, XML, Comment, Text}
@@ -355,7 +356,7 @@ class LiftServlet {
         (request, S.init(request, session)
          (LiftRules.performTransform(
               convertAnswersToCometResponse(session,
-                                            answers.toArray, actors)))),
+                                            answers, actors)))),
                                               request.request))
 
     cont ! BeginContinuation

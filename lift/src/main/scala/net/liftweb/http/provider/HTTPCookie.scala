@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions
  * and limitations under the License.
  */
-package net.liftweb.http.provider
+package net.liftweb
+package http
+package provider
 
 import _root_.net.liftweb.util.{Box, Empty, Full}
 

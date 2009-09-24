@@ -1,7 +1,7 @@
 package net.liftweb.util;
 
 /*
- * Copyright 2007-2008 WorldWide Conferencing, LLC
+ * Copyright 2007-2009 WorldWide Conferencing, LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -79,7 +79,7 @@ trait CombParserHelpers {
   /**
    * @return a list of elements (Elem) from a String
    */
-  implicit def strToLst(in: String): List[Elem] = stringWrapper(in).toList
+  implicit def strToLst(in: String): List[Elem] = (new scala.runtime.RichString(in)).toList
 
   /**
    * @return a parser for a digit

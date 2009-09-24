@@ -16,7 +16,7 @@
 
 package net.liftweb.actor
 
-import util._
+import net.liftweb.util._
 import Helpers._
 
 class LAFuture[T] {

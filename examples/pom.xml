@@ -12,12 +12,14 @@
   <packaging>pom</packaging>
   <modules>
     <module>example</module>
+    <!--
     <module>examples-osgi</module>
     <module>skittr</module>
     <module>hellolift</module>
     <module>hellodarwin</module>
     <module>JPADemo</module>
     <module>http-authentication</module>
+    -->
   </modules>
   <dependencies>
     <dependency>

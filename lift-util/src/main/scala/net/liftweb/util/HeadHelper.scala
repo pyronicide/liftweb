@@ -65,9 +65,11 @@ object HeadHelper {
   def mergeToHtmlHead(xhtml: NodeSeq) : NodeSeq = {
 
     val headInBody: NodeSeq =
-    (for (body <- xhtml \ "body";
-          head <- findElems(body)(_.label == "head")) yield head.child).
-      flatMap {e => e}
+      for {
+	body <- xhtml \ "body";
+	head <- findElems(body)(_.label == "head")
+	child <- head.child
+      } yield child
 
     if (headInBody.isEmpty) {
       xhtml
@@ -79,8 +81,11 @@ object HeadHelper {
         case e: Elem if inBody && e.label == "head" => NodeSeq.Empty
 
         case e: Elem if e.label == "head" =>
+	  val tList = new ListBuffer[Node]
+	tList ++= e.child
+	tList ++= headInBody
           Elem(e.prefix, e.label, e.attributes,
-               e.scope, removeHtmlDuplicates(e.child ++ headInBody) :_*)
+               e.scope, removeHtmlDuplicates(tList.toList) :_*)
 
         case e: Elem =>
           Elem(e.prefix, e.label, e.attributes, e.scope, xform(e.child, inBody) :_*)

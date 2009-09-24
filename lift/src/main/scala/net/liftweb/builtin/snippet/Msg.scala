@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions
  * and limitations under the License.
  */
-package net.liftweb.builtin.snippet
+package net.liftweb
+package builtin
+package snippet
 
 import _root_.net.liftweb.http._
 import _root_.net.liftweb.http.S._
@@ -44,6 +46,7 @@ object Msg extends DispatchSnippet {
   def dispatch: DispatchIt = {
     case _ => render
   }
+
   def render(styles: NodeSeq): NodeSeq = {
     val msgs: (String) => NodeSeq = (id) => {
       attr("errorClass").map(cls => MsgErrorMeta += (id -> cls))

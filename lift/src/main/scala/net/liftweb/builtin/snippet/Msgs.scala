@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions
  * and limitations under the License.
  */
-package net.liftweb.builtin.snippet;
+package net.liftweb
+package builtin
+package snippet
 
 import _root_.net.liftweb.http._
 import _root_.scala.xml._
@@ -80,7 +82,7 @@ object Msgs extends DispatchSnippet {
           }
         }
         msg.toList.map(e => (<li>{e}</li>) ) match {
-          case Nil => Nil
+          case x if x.isEmpty => Nil
           case msgList => val ret = (<div id={LiftRules.noticesContainerId + "_" + ord}>{title}<ul>{msgList}</ul></div>)
             styles.foldLeft(ret)((xml, style) => xml % new UnprefixedAttribute("class", Text(style), Null))
         }

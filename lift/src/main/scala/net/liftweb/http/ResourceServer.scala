@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions
  * and limitations under the License.
  */
-package net.liftweb.http
+package net.liftweb
+package http
 
 import _root_.net.liftweb.util.{Box, Full, Empty, Helpers}
 import Helpers._

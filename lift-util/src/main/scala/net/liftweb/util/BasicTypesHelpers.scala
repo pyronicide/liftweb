@@ -24,7 +24,25 @@ object BasicTypesHelpers extends BasicTypesHelpers with StringHelpers with Contr
 /**
  * This trait adds functionality to Scala standard types
  */
-trait BasicTypesHelpers { self: StringHelpers with ControlHelpers =>
+trait BasicTypesHelpers { 
+  self: StringHelpers with ControlHelpers =>
+    
+    import scala.collection.generic._
+  
+  implicit def nsBuilder[T]: BuilderFactory[Node, NodeSeq, Seq[T]] =
+    new BuilderFactory[Node, NodeSeq, Seq[T]] {
+      def apply(from: Seq[T]) = 
+	new Builder[Node, NodeSeq] {
+	  private[this] val buffer = new scala.collection.mutable.ListBuffer[Node]
+	  def clear = buffer.clear
+	  def +=(n: Node) = {
+	    buffer += n
+	    this
+	  }
+	  def result: NodeSeq = buffer.toList
+	}
+    }
+
 
   /**
    * Allows an implicit transform from a Boolean to a Boolean2, allowing expressions such as:

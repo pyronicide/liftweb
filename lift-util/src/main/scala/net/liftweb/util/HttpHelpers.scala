@@ -23,7 +23,10 @@ import _root_.java.util.concurrent.atomic.AtomicLong
 
 object HttpHelpers extends ListHelpers with StringHelpers
 
-trait HttpHelpers { self: ListHelpers with StringHelpers  =>
+trait HttpHelpers { 
+  self: ListHelpers with StringHelpers  =>
+    
+
 
   /**
    * URL decode the string.
@@ -93,8 +96,8 @@ trait HttpHelpers { self: ListHelpers with StringHelpers  =>
    * Transform a general Map to a nutable HashMap
    */
   def toHashMap[A,B](in : Map[A,B]) : HashMap[A,B] = {
-    val ret = new HashMap[A,B];
-    in.keys.foreach { k => ret += Pair(k, in(k)) }
+    val ret = new HashMap[A,B]
+    in.foreach{ case(k, v) => ret(k) = v}
     ret
   }
 
@@ -251,7 +254,7 @@ trait HttpHelpers { self: ListHelpers with StringHelpers  =>
     def doIt(in: NodeSeq) {
       in.foreach {
         case e: Elem if e.prefix == prefix && e.label == label =>
-          e.child.foreach(ret.+)
+          e.child.foreach(ret.+=)
         case g: Group => doIt(g.nodes)
         case n => doIt(n.child)
       }

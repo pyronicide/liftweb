@@ -14,7 +14,9 @@
  * and limitations under the License.
  */
 
-package net.liftweb.http.jquery
+package net.liftweb
+package http
+package jquery
 
 import _root_.net.liftweb.http.S._
 import _root_.net.liftweb.http.SHtml._

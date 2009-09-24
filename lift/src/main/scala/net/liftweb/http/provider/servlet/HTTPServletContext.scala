@@ -1,4 +1,7 @@
-package net.liftweb.http.provider.servlet
+package net.liftweb
+package http
+package provider
+package servlet
 
 import _root_.javax.servlet.{ServletContext}
 import _root_.java.net.URL

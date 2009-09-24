@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions
  * and limitations under the License.
  */
-package net.liftweb.http.provider
+package net.liftweb
+package http
+package provider
 
 import _root_.java.io.{OutputStream}
 
@@ -27,7 +29,7 @@ trait HTTPResponse {
    * 
    * @param cookies - the list of response cookies
    */
-  def addCookies(cookies: List[HTTPCookie])
+  def addCookies(cookies: List[HTTPCookie]): Unit
 
   /**
    * Encodes the URL such that it adds the session ID if it is necessary to the URL.
@@ -43,14 +45,14 @@ trait HTTPResponse {
    * 
    * @param headers - the list of headers
    */
-  def addHeaders(headers: List[HTTPParam])
+  def addHeaders(headers: List[HTTPParam]): Unit
 
   /**
    * Sets the HTTP response status
    * 
    * @param status - the HTTP status
    */
-  def setStatus(status: Int)
+  def setStatus(status: Int): Unit
 
   /**
    * @return - the OutputStream that can be used to send down o the client the response body.

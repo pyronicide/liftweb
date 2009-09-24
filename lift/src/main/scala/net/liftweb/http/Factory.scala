@@ -14,7 +14,8 @@
  * and limitations under the License.
  */
 
-package net.liftweb.http
+package net.liftweb
+package http
 
 import util._
 import _root_.scala.reflect.Manifest

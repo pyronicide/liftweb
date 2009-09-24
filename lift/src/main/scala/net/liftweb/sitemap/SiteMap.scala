@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions
  * and limitations under the License.
  */
-package net.liftweb.sitemap
+package net.liftweb
+package sitemap
 
 import _root_.net.liftweb.http._
 import _root_.net.liftweb.util._
@@ -54,7 +55,7 @@ case class SiteMap(globalParamFuncs: List[PartialFunction[Box[Req], Loc.LocParam
   kids.flatMap(_.locForGroup(group)).filter(_.testAccess match {
       case Left(true) => true case _ => false})
 
-  lazy val menus: List[Menu] = locs.values.map(_.menu).toList
+  lazy val menus: List[Menu] = locs.valuesIterator.map(_.menu).toList
 
   def buildMenu(current: Box[Loc[_]]): CompleteMenu = {
     val path: List[Loc[_]] = current match {
@@ -84,7 +85,7 @@ object SiteMap {
         case x if x.text.length > 0 => x
         case _ => loc.linkText openOr Text(loc.name)
       }
-    }</a>).firstOption getOrElse NodeSeq.Empty
+    }</a>).headOption getOrElse NodeSeq.Empty
 
   def buildLink(name: String): NodeSeq =
   buildLink(name, Nil)

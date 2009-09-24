@@ -62,8 +62,8 @@ object BindPlus {
          choices map {c =>
            index += 1
            choice match {
-             case (i, fn) if i == index-1 => FuncBindParam(c, fn)
-             case _ => TheBindParam(c, NodeSeq.Empty)
+             case (i, fn) if i == index-1 => new FuncBindParam(c, fn)
+             case _ => new TheBindParam(c, NodeSeq.Empty)
            }
          } : _*
     )

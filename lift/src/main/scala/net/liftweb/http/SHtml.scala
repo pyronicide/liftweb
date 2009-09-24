@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions
  * and limitations under the License.
  */
-package net.liftweb.http;
+package net.liftweb
+package http
 
 import S._
 import _root_.net.liftweb.util._
@@ -771,10 +772,11 @@ object SHtml {
   case class ChoiceItem[T](key: T, xhtml: NodeSeq)
 
   case class ChoiceHolder[T](items: Seq[ChoiceItem[T]]) {
-    def apply(in: T) = items.filter(_.key == in).first.xhtml
+    def apply(in: T) = items.filter(_.key == in).head.xhtml
     def apply(in: Int) = items(in).xhtml
     def map[A](f: ChoiceItem[T] => A) = items.map(f)
-    def flatMap[A](f: ChoiceItem[T] => Iterable[A]) = items.flatMap(f)
+    def flatMap[A](f: ChoiceItem[T] => scala.collection.Traversable[A])(implicit bf : scala.collection.generic.BuilderFactory[A, Seq[A], scala.collection.Sequence[ChoiceItem[T]]]): Seq[A] = 
+      items.flatMap(f)(bf)
     def filter(f: ChoiceItem[T] => Boolean) = items.filter(f)
     def toForm: NodeSeq = flatMap(ChoiceHolder.htmlize)
   }
@@ -788,7 +790,7 @@ object ChoiceHolder {
 
   def checkbox[T](possible: Seq[T], actual: Seq[T], func: Seq[T] => Any, attrs: (String, String)*): ChoiceHolder[T] = {
     val len = possible.length
-    fmapFunc(LFuncHolder( (strl: List[String]) => {func(strl.firstOption.toList.map(toInt(_)).filter(x =>x >= 0 && x < len).map(possible(_))); true})){
+    fmapFunc(LFuncHolder( (strl: List[String]) => {func(strl.headOption.toList.map(toInt(_)).filter(x =>x >= 0 && x < len).map(possible(_))); true})){
       name =>
 
 
@@ -843,9 +845,9 @@ object AjaxContext {
 }
 
 
-case class AjaxContext(success: Box[String], failure: Box[String], responseType: AjaxType.Value)
+class AjaxContext(val success: Box[String],val failure: Box[String],val responseType: AjaxType.Value)
 
-case class JsContext(override val success: Box[String], override val failure: Box[String]) extends AjaxContext(success, failure, AjaxType.JavaScript)
+class JsContext(success: Box[String], failure: Box[String]) extends AjaxContext(success, failure, AjaxType.JavaScript)
 
-case class JsonContext(override val success: Box[String], override val failure: Box[String]) extends AjaxContext(success, failure, AjaxType.JSON)
+class JsonContext(success: Box[String], failure: Box[String]) extends AjaxContext(success, failure, AjaxType.JSON)
 

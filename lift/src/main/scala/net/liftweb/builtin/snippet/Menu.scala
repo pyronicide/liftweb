@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions
  * and limitations under the License.
  */
-package net.liftweb.builtin.snippet
+package net.liftweb
+package builtin
+package snippet
 
 import _root_.net.liftweb.http.{S, DispatchSnippet, LiftRules}
 import _root_.net.liftweb.http.js._
@@ -44,6 +46,23 @@ object Menu extends DispatchSnippet {
     case "group" => group
     case "json" => jsonMenu
   }
+
+  import scala.collection.generic._
+
+  def jsBuilder[T]: BuilderFactory[JsExp, Seq[JsExp], Seq[T]] =
+    new BuilderFactory[JsExp, Seq[JsExp], Seq[T]] {
+      def apply(from: Seq[T]) = 
+	new Builder[JsExp, Seq[JsExp]] {
+	  private[this] val buffer = new scala.collection.mutable.ListBuffer[JsExp]
+	  def clear = buffer.clear
+	  def +=(n: JsExp) = {
+	    buffer += n
+	    this
+	  }
+	  def result: Seq[JsExp] = buffer.toList
+	  
+	}
+    }
 
   /**
    * <p>This snippet method renders a menu representing your SiteMap contents. The
@@ -185,7 +204,7 @@ object Menu extends DispatchSnippet {
     }
 
     def buildItems(in: Seq[MenuItem]): JsExp =
-    JsArray(in.map(buildItem) :_*)
+    JsArray(in.map(buildItem)(jsBuilder) :_*)
 
     Script(JsCrVar(S.attr("var") openOr "lift_menu",
                    JsObj("menu" -> buildItems(toRender))))

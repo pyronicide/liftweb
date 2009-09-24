@@ -1,5 +1,7 @@
-package net.liftweb.util
-import _root_.scala.xml._
+package net.liftweb
+package util
+
+import scala.xml._
 
 /*
  * Copyright 2006-2009 WorldWide Conferencing, LLC

@@ -127,7 +127,7 @@ trait BindHelpers {
    * @return 'out' element with attributes from 'in'
    */
   def mixinAttributes(out: Elem)(in: NodeSeq): NodeSeq = {
-    val attributes = in.firstOption.map(_.attributes).getOrElse(Null)
+    val attributes = in.headOption.map(_.attributes).getOrElse(Null)
     out % attributes
   }
 
@@ -192,64 +192,64 @@ trait BindHelpers {
   /**
    * Constant BindParam always returning the same value
    */
-  final case class TheBindParam(name: String, value: NodeSeq) extends Tuple2(name, value) with BindParam {
+  final class TheBindParam(val name: String,val value: NodeSeq) extends Tuple2(name, value) with BindParam {
     def calcValue(in: NodeSeq): NodeSeq = value
   }
 
   /**
    * Constant BindParam always returning the same value
    */
-  final case class TheStrBindParam(name: String, value: String) extends Tuple2(name, value) with BindParam {
+  final class TheStrBindParam(val name: String,val value: String) extends Tuple2(name, value) with BindParam {
     def calcValue(in: NodeSeq): NodeSeq = Text(value)
   }
 
   /**
    * BindParam taking its value from an attribute
    */
-  final case class AttrBindParam(name: String, myValue: NodeSeq,
-                                 newAttr: String) extends BindParam with BindWithAttr {
+  final class AttrBindParam(val name: String,val myValue: NodeSeq,
+                                 val newAttr: String) extends BindParam with BindWithAttr {
     def calcValue(in: NodeSeq): NodeSeq = myValue
   }
 
   /**
    * BindParam using a function to calculate its value
    */
-  final case class FuncBindParam(name: String, value: NodeSeq => NodeSeq) extends Tuple2(name, value) with BindParam {
+  final class FuncBindParam(val name: String, val value: NodeSeq => NodeSeq) extends Tuple2(name, value) with BindParam {
     def calcValue(in: NodeSeq): NodeSeq = value(in)
   }
 
   /**
    * BindParam using a function to calculate its value
    */
-  final case class FuncAttrBindParam(name: String, value: NodeSeq => NodeSeq, newAttr: String) extends BindParam with BindWithAttr {
+  final class FuncAttrBindParam(val name: String,val value: NodeSeq => NodeSeq, val newAttr: String) extends BindParam with BindWithAttr {
     def calcValue(in: NodeSeq): NodeSeq = value(in)
   }
 
-  final case class OptionBindParam(name: String, value: Option[NodeSeq]) extends Tuple2(name, value) with BindParam {
+  final class OptionBindParam(val name: String,val value: Option[NodeSeq]) extends Tuple2(name, value) with BindParam {
     def calcValue(in: NodeSeq): NodeSeq = value getOrElse NodeSeq.Empty
   }
 
-  case class BoxBindParam(name: String, value: Box[NodeSeq]) extends Tuple2(name, value) with BindParam {
+  final class BoxBindParam(val name: String,val value: Box[NodeSeq]) extends Tuple2(name, value) with BindParam {
     def calcValue(in: NodeSeq): NodeSeq = value openOr NodeSeq.Empty
   }
 
-  case class SymbolBindParam(name: String, value: Symbol) extends Tuple2(name, value) with BindParam {
+  final class SymbolBindParam(val name: String,val value: Symbol) extends Tuple2(name, value) with BindParam {
     def calcValue(in: NodeSeq): NodeSeq = Text(value.name)
   }
 
-  case class IntBindParam(name: String, value: Int) extends Tuple2[String, Int](name, value) with BindParam {
+  final class IntBindParam(val name: String,val value: Int) extends Tuple2[String, Int](name, value) with BindParam {
     def calcValue(in: NodeSeq): NodeSeq = Text(value.toString)
   }
 
-  case class LongBindParam(name: String, value: Long) extends Tuple2[String, Long](name, value) with BindParam {
+  final class LongBindParam(val name: String,val value: Long) extends Tuple2[String, Long](name, value) with BindParam {
     def calcValue(in: NodeSeq): NodeSeq = Text(value.toString)
   }
 
-  case class BooleanBindParam(name: String, value: Boolean) extends Tuple2[String, Boolean](name, value) with BindParam {
+  final class BooleanBindParam(val name: String,val value: Boolean) extends Tuple2[String, Boolean](name, value) with BindParam {
     def calcValue(in: NodeSeq): NodeSeq = Text(value.toString)
   }
 
-  case class TheBindableBindParam[T <: Bindable](name: String, value: T) extends Tuple2[String, T](name, value) with BindParam {
+  final class TheBindableBindParam[T <: Bindable](val name: String,val value: T) extends Tuple2[String, T](name, value) with BindParam {
     def calcValue(in: NodeSeq): NodeSeq = value.asHtml
   }
 
@@ -270,31 +270,31 @@ trait BindHelpers {
     // getting caught because it's not a bind param
     def ->[T <: SpecialNode](in: T with SpecialNode) = Tuple2[String, T](name, in)
 
-    def ->(in: String) = TheStrBindParam(name, in)
-    def ->(in: NodeSeq) = TheBindParam(name, in)
-    def ->(in: Text) = TheBindParam(name, in)
-    def ->(in: Node) = TheBindParam(name, in)
-    def ->(in: Seq[Node]) = TheBindParam(name, in)
-    def ->(in: NodeSeq => NodeSeq) = FuncBindParam(name, in)
-    def ->(in: Box[NodeSeq]) = BoxBindParam(name, in)
-    def ->(in: Option[NodeSeq]) = OptionBindParam(name, in)
-    def ->(in: Symbol) = SymbolBindParam(name, in)
-    def ->(in: Int) = IntBindParam(name, in)
-    def ->(in: Long) = LongBindParam(name, in)
-    def ->(in: Boolean) = BooleanBindParam(name, in)
-    def ->[T <: Bindable](in: T with Bindable) = TheBindableBindParam[T](name, in)
+    def ->(in: String) = new TheStrBindParam(name, in)
+    def ->(in: NodeSeq) = new TheBindParam(name, in)
+    def ->(in: Text) = new TheBindParam(name, in)
+    def ->(in: Node) = new TheBindParam(name, in)
+    def ->(in: Seq[Node]) = new TheBindParam(name, in)
+    def ->(in: NodeSeq => NodeSeq) = new FuncBindParam(name, in)
+    def ->(in: Box[NodeSeq]) = new BoxBindParam(name, in)
+    def ->(in: Option[NodeSeq]) = new OptionBindParam(name, in)
+    def ->(in: Symbol) = new SymbolBindParam(name, in)
+    def ->(in: Int) = new IntBindParam(name, in)
+    def ->(in: Long) = new LongBindParam(name, in)
+    def ->(in: Boolean) = new BooleanBindParam(name, in)
+    def ->[T <: Bindable](in: T with Bindable) = new TheBindableBindParam[T](name, in)
     def ->[T](in: T) = Tuple2[String, T](name, in)
 
-    def -%>(in: Elem) = FuncBindParam(name, old => in % (BindHelpers.currentNode.map(_.attributes) openOr Null))
-    def -%>(in: Box[Elem]) = FuncBindParam(name, old => in.map(_ % (BindHelpers.currentNode.map(_.attributes) openOr Null)) openOr NodeSeq.Empty)
-    def -%>(in: Option[Elem]) = FuncBindParam(name, old => in.map(_ % (BindHelpers.currentNode.map(_.attributes) openOr Null)) getOrElse NodeSeq.Empty)
-    def -%>(in: NodeSeq => Elem) = FuncBindParam(name, old => in(old) % (BindHelpers.currentNode.map(_.attributes) openOr Null))
+    def -%>(in: Elem) = new FuncBindParam(name, old => in % (BindHelpers.currentNode.map(_.attributes) openOr Null))
+    def -%>(in: Box[Elem]) = new FuncBindParam(name, old => in.map(_ % (BindHelpers.currentNode.map(_.attributes) openOr Null)) openOr NodeSeq.Empty)
+    def -%>(in: Option[Elem]) = new FuncBindParam(name, old => in.map(_ % (BindHelpers.currentNode.map(_.attributes) openOr Null)) getOrElse NodeSeq.Empty)
+    def -%>(in: NodeSeq => Elem) = new FuncBindParam(name, old => in(old) % (BindHelpers.currentNode.map(_.attributes) openOr Null))
 
 
-    def _id_>(in: Elem) = FuncBindParam(name, _ => in % new UnprefixedAttribute("id", name, Null))
-    def _id_>(in: Box[Elem]) = FuncBindParam(name, _ => in.map(_ % new UnprefixedAttribute("id", name, Null)) openOr NodeSeq.Empty)
-    def _id_>(in: Option[Elem]) = FuncBindParam(name, _ => in.map(_ % new UnprefixedAttribute("id", name, Null)) getOrElse NodeSeq.Empty)
-    def _id_>(in: NodeSeq => Elem) = FuncBindParam(name, kids => in(kids) % new UnprefixedAttribute("id", name, Null))
+    def _id_>(in: Elem) = new FuncBindParam(name, _ => in % new UnprefixedAttribute("id", name, Null))
+    def _id_>(in: Box[Elem]) = new FuncBindParam(name, _ => in.map(_ % new UnprefixedAttribute("id", name, Null)) openOr NodeSeq.Empty)
+    def _id_>(in: Option[Elem]) = new FuncBindParam(name, _ => in.map(_ % new UnprefixedAttribute("id", name, Null)) getOrElse NodeSeq.Empty)
+    def _id_>(in: NodeSeq => Elem) = new FuncBindParam(name, kids => in(kids) % new UnprefixedAttribute("id", name, Null))
 
   }
 
@@ -306,14 +306,14 @@ trait BindHelpers {
    *
    * @deprecated use -> instead
    */
-  @deprecated
+  @deprecated("use -> instead")
   class BindParamAssoc(val name: String) {
-    def -->(value: String): BindParam = TheBindParam(name, Text(value))
-    def -->(value: NodeSeq): BindParam = TheBindParam(name, value)
-    def -->(value: Symbol): BindParam = TheBindParam(name, Text(value.name))
-    def -->(value: Any): BindParam = TheBindParam(name, Text(if (value == null) "null" else value.toString))
-    def -->(func: NodeSeq => NodeSeq): BindParam = FuncBindParam(name, func)
-    def -->(value: Box[NodeSeq]): BindParam = TheBindParam(name, value.openOr(Text("Empty")))
+    def -->(value: String): BindParam = new TheBindParam(name, Text(value))
+    def -->(value: NodeSeq): BindParam = new TheBindParam(name, value)
+    def -->(value: Symbol): BindParam = new TheBindParam(name, Text(value.name))
+    def -->(value: Any): BindParam = new TheBindParam(name, Text(if (value == null) "null" else value.toString))
+    def -->(func: NodeSeq => NodeSeq): BindParam = new FuncBindParam(name, func)
+    def -->(value: Box[NodeSeq]): BindParam = new TheBindParam(name, value.openOr(Text("Empty")))
   }
 
   /**
@@ -323,7 +323,7 @@ trait BindHelpers {
    *
    * @deprecated use -> instead
    */
-  @deprecated
+  @deprecated("use -> instead")
   implicit def strToBPAssoc(in: String): BindParamAssoc = new BindParamAssoc(in)
 
   /**
@@ -333,7 +333,7 @@ trait BindHelpers {
    *
    * @deprecated use -> instead
    */
-  @deprecated
+  @deprecated("use -> instead")
   implicit def symToBPAssoc(in: Symbol): BindParamAssoc = new BindParamAssoc(in.name)
 
   /**
@@ -342,7 +342,7 @@ trait BindHelpers {
    *
    * @deprecated use bind instead
    */
-  @deprecated
+  @deprecated("use bind instead")
   def xbind(namespace: String, xml: NodeSeq)(transform: PartialFunction[String, NodeSeq => NodeSeq]): NodeSeq = {
     def rec_xbind(xml: NodeSeq): NodeSeq = {
       xml.flatMap {
@@ -542,7 +542,7 @@ trait BindHelpers {
    * @param atWhat data to bind
    * @deprecated use the bind function instead
    */
-  @deprecated
+  @deprecated("use the bind function instead")
   def processBind(around: NodeSeq, atWhat: Map[String, NodeSeq]) : NodeSeq = {
 
     /** Find element matched predicate f(x).isDefined, and return f(x) if found or None otherwise. */

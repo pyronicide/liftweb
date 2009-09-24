@@ -14,7 +14,10 @@
  * and limitations under the License.
  */
 
-package net.liftweb.http.js.jquery
+package net.liftweb
+package http
+package js
+package jquery
 
 import _root_.scala.xml.{Elem, NodeSeq}
 

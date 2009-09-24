@@ -1,4 +1,7 @@
-package net.liftweb.http.provider.servlet
+package net.liftweb
+package http
+package provider
+package servlet
 
 
 import _root_.scala.collection.mutable.{ListBuffer}
@@ -22,11 +25,12 @@ class HTTPResponseServlet(resp: HttpServletResponse) extends HTTPResponse {
 
   def encodeUrl(url: String): String = resp encodeURL url
 
-  def addHeaders(headers: List[HTTPParam]) =
-    for (h <- headers;
-         value <- h.values) yield {
-      resp.addHeader(h.name, value)
-    }
+  def addHeaders(headers: List[HTTPParam]): Unit =
+    for {
+      h <- headers
+      value <- h.values
+    } resp.addHeader(h.name, value)
+
 
   def setStatus(status: Int) = resp setStatus status
 

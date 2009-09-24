@@ -175,16 +175,21 @@ Lift is a scala web framework.
     <module>lift-util</module>
     <module>lift-actor</module>
     <module>lift</module>
+    <module>lift-widgets</module>
+    <!--
     <module>lift-wizard</module>
     <module>lift-osgi</module>
+    -->
     <module>lift-mapper</module>
+    <!--
     <module>lift-machine</module>
     <module>lift-record</module>
+    -->
     <module>lift-textile</module>
+    <!--
     <module>lift-facebook</module>
     <module>lift-amqp</module>
     <module>lift-xmpp</module>
-    <module>lift-widgets</module>
     <module>lift-openid</module>
     <module>lift-oauth</module>
     <module>lift-paypal</module>
@@ -193,6 +198,7 @@ Lift is a scala web framework.
     <module>lift-jta</module>
     <module>lift-jpa</module>
     <module>lift-archetypes</module>
+    -->
     <module>examples</module>
   </modules>
   <pluginRepositories>

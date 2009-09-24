@@ -14,7 +14,9 @@
  * and limitations under the License.
  */
 
-package net.liftweb.builtin.snippet
+package net.liftweb
+package builtin
+package snippet
 
 import _root_.scala.xml._
 import _root_.net.liftweb.http._

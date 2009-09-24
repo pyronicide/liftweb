@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions
  * and limitations under the License.
  */
-package net.liftweb.http.auth
+package net.liftweb
+package http
+package auth
 
 import _root_.net.liftweb.util._
 import _root_.net.liftweb.util.Helpers._
@@ -98,7 +100,7 @@ case class HttpDigestAuthentication(realmName: String)(func: PartialFunction[(St
              nonceMap -= entry._1
            }
          })
-         case ShutDown => self.exit("Terminating nonce actor");
+         case ShutDown => exit("Terminating nonce actor");
         }
       }
     }
@@ -142,7 +144,7 @@ case class HttpDigestAuthentication(realmName: String)(func: PartialFunction[(St
   override def unauthorizedResponse = {
     val nonce = randomString(64);
     nonceMap += (nonce -> System.currentTimeMillis)
-    UnauthorizedDigestResponse(realm, Qop.AUTH, nonce, randomString(64))
+    new UnauthorizedDigestResponse(realm, Qop.AUTH, nonce, randomString(64))
   }
 
   def verified_? = {case (req) => {
