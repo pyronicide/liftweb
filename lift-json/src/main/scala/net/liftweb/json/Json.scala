@@ -176,7 +176,7 @@ object JsonAST {
     case d :: ds => (d :: p) :: punctuate(p, ds)
   }
 
-  private def quote(s: String) = (s.map { 
+  private def quote(s: String) = (s.toList.map { 
       case '\r' => "\\r"
       case '\n' => "\\n"
       case '\t' => "\\t"

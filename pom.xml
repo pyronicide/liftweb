@@ -168,7 +168,7 @@ Lift is a scala web framework.
     <url>http://hudson.scala-tools.org/job/Lift/</url>
   </ciManagement>
   <properties>
-    <scala.version>2.7.5</scala.version>
+    <scala.version>2.8.0-SNAPSHOT</scala.version>
   </properties>
   <modules>
     <module>lift-json</module>
